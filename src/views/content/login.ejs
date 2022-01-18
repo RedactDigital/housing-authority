@@ -1,0 +1,9 @@
+<h3 style="margin-bottom: 0;">
+    <%- title %>
+        <% for( let i=0; i < navLinks.length; i++ ) { %>
+            <% if (navLinks[i].active) { %>
+                – <%= navLinks[i].name %>
+                    <% } %>
+                        <% } %>
+
+</h3>
