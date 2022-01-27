@@ -1,35 +1,25 @@
 const ejs = require('ejs')
+const { keys } = require('../database/models')
 
 class Auth {
   static async index(req, res) {
-    const keys = []
-    const randomWords = require('random-words')
-
-    for (let i = 0; i < 5000; i++) {
-      keys.push({
-        key: i + 1,
-        room: `${i + 101}`,
-        building: randomWords({ exactly: 1, maxLength: 5 }),
-        description: randomWords({ exactly: 1, wordsPerString: 8 }),
-        lockNumber: Math.floor(Math.random() * 1000000),
-      })
-    }
+    const data = await keys.findAll()
 
     const content = await ejs.renderFile(`${__dirname}/../views/content/keys.ejs`, {
       title: process.env.APP_NAME,
       description: 'A searchable list of all the keys in the system.',
-      keys,
+      keys: data,
       navLinks: [
         {
           name: 'Home',
           url: '/',
           active: req.path == '/',
         },
-        {
-          name: 'Keys',
-          url: '/keys',
-          active: req.path == '/keys',
-        },
+        // {
+        //   name: 'Keys',
+        //   url: '/keys',
+        //   active: req.path == '/keys',
+        // },
       ],
     })
     const params = {
@@ -42,15 +32,63 @@ class Auth {
           url: '/',
           active: req.path == '/',
         },
-        {
-          name: 'Keys',
-          url: '/keys',
-          active: req.path == '/keys',
-        },
+        // {
+        //   name: 'Keys',
+        //   url: '/keys',
+        //   active: req.path == '/keys',
+        // },
       ],
     }
 
     res.render('index', params)
+  }
+
+  static async create(req, res) {
+    const { key, doorNumber, doorLocation, description, lockNumber } = req.body
+
+    await keys.create({
+      key,
+      doorNumber,
+      doorLocation,
+      description,
+      lockNumber,
+    })
+
+    res.redirect('/')
+  }
+
+  static async update(req, res) {
+    const { id } = req.params
+    const { key, doorNumber, doorLocation, description, lockNumber } = req.body
+
+    await keys.update(
+      {
+        key,
+        doorNumber,
+        doorLocation,
+        description,
+        lockNumber,
+      },
+      {
+        where: {
+          id,
+        },
+      }
+    )
+
+    res.redirect('/')
+  }
+
+  static async delete(req, res) {
+    const { id } = req.params
+
+    await keys.destroy({
+      where: {
+        id,
+      },
+    })
+
+    res.redirect('/')
   }
 }
 

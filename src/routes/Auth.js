@@ -13,9 +13,11 @@ class AuthRoute extends Route {
   return() {
     auth.get('/', Auth.index)
 
-    // .patch('/password/reset/send', AuthService.resetPasswordNotification)
+    auth.post('/create', Auth.create)
 
-    // .patch('/password/reset', AuthService.resetPassword);
+    auth.post('/update/:id', Auth.update)
+
+    auth.post('/delete/:id', Auth.delete)
 
     return auth
   }

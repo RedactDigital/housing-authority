@@ -1,13 +1,13 @@
-version: "3.7"
+version: '3.7'
 services:
-  app:
+  housing-authority:
     image: node:16.6.1-alpine
-    container_name: app
+    container_name: housing-authority
     restart: unless-stopped
     working_dir: /var/www
     command: sh -c "npm install && npm start"
     ports:
-      - "5000:5000"
+      - '5000:5000'
     volumes:
       - ./:/var/www
     networks:

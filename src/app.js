@@ -17,8 +17,6 @@ app
     express.static(path.join(__dirname, './public')) // Express static middleware serves files from a given root directory
   )
 
-console.log(__dirname)
-
 // Passport authentication middleware
 // require('./middleware/passport/authentication')(passport);
 // const standardAuth = passport.authenticate('jwt', { session: false, msg: 'false' });

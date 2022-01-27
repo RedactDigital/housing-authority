@@ -20,7 +20,7 @@
     </div>
 </div>
 <div class="row">
-    <form action="" method="post" id="key-form"></form>
+    <form action="/create" method="post" id="key-form"></form>
 </div>
 <div class="row">
     <div class="input-field col s6">
@@ -41,25 +41,28 @@
     <table id="table" class="striped highlight dense">
         <thead>
             <tr class="blue-grey">
-                <th>Key Number</th>
-                <th>Room</th>
-                <th>Building</th>
+                <th>Key Tag Number</th>
+                <th>Door Number</th>
+                <th>Door Location</th>
                 <th class="hide-on-med-and-down">Description</th>
-                <th>Lock Number</th>
+                <th>Lock Pin Number</th>
                 <th class="center">Actions</th>
             </tr>
         </thead>
         <tbody>
             <% for( let i=0; i < keys.length; i++ ) { %>
                 <tr style="display: none;">
+                    <td class="id">
+                        <%= keys[i].id %>
+                    </td>
                     <td width="10%" class="key">
                         <%= keys[i].key %>
                     </td>
                     <td width="10%" class="room">
-                        <%= keys[i].room %>
+                        <%= keys[i].doorNumber %>
                     </td>
                     <td width="15%" class="building">
-                        <%= keys[i].building %>
+                        <%= keys[i].doorLocation %>
                     </td>
                     <td width="40%" class="text-overflow description hide-on-med-and-down">
                         <p>
@@ -71,7 +74,7 @@
                     </td>
                     <td width="10%" class="center">
                         <i class="material-icons">edit</i>
-                        <i class="material-icons">delete_forever</i>
+                        <a href="/delete/<%= keys[i].id %> "><i class="material-icons">delete_forever</i></a>
                     </td>
                 </tr>
                 <% } %>
@@ -172,29 +175,29 @@
         let html = `
         <div class="row">
           <div class="input-field col s12 m4">
-            <input id="key" type="text" class="validate">
+            <input id="key" type="text" class="validate" name="key">
             <label for="key">Key Number</label>
           </div>
           <div class="input-field col s12 m4">
-            <input id="room" type="text" class="validate">
-            <label for="room">Room</label>
+            <input id="doorNumber" type="text" class="validate" name="doorNumber">
+            <label for="doorNumber">Door Number</label>
           </div>
           <div class="input-field col s12 m4">
-            <input id="lockNumber" type="text" class="validate">
+            <input id="lockNumber" type="text" class="validate" name="lockNumber">
             <label for="lockNumber">Lock Number</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field col s12 m4">
-            <input id="building" type="text" class="validate">
-            <label for="building">Building</label>
+            <input id="doorLocation" type="text" class="validate" name="doorLocation">
+            <label for="doorLocation">Door Location</label>
           </div>
           <div class="input-field col s12 m4">
-            <textarea id="description" class="materialize-textarea"></textarea>
+            <textarea id="description" class="materialize-textarea" name="description"></textarea>
             <label for="description">Description</label>
           </div>
           <div class="col s12 m4">
-            <button style="margin: 1.5em 0 1.5em 0" class="btn waves-effect waves-light right blue-grey" type="submit" name="action">Submit
+            <button style="margin: 1.5em 0 1.5em 0" class="btn waves-effect waves-light right blue-grey">Submit
               <i class="material-icons right">send</i>
             </button>
           </div>
@@ -237,11 +240,12 @@
 
         for (let i = 0; i < rows.length; i++) {
             key = {};
-            key.key = rows[i].getElementsByClassName("key")[0].innerText;
-            key.room = rows[i].getElementsByClassName("room")[0].innerText;
-            key.building = rows[i].getElementsByClassName("building")[0].innerText;
-            key.description = rows[i].getElementsByClassName("description")[0].innerText;
-            key.lockNumber = rows[i].getElementsByClassName("lockNumber")[0].innerText;
+            key.id = rows[i].getElementsByClassName("id")[0].innerText.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+            key.key = rows[i].getElementsByClassName("key")[0].innerText.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+            key.room = rows[i].getElementsByClassName("room")[0].innerText.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+            key.building = rows[i].getElementsByClassName("building")[0].innerText.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+            key.description = rows[i].getElementsByClassName("description")[0].innerText.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+            key.lockNumber = rows[i].getElementsByClassName("lockNumber")[0].innerText.replace(/^\s+|\s+$|\s+(?=\s)/g, "");
             keys.push(key);
         }
         return keys;
@@ -268,8 +272,17 @@
                 </td>
                 <td class="lockNumber" width="15%">${ keys[i].lockNumber }</td>
                 <td class="center" width="10%">
-                    <i class="material-icons">edit</i>
-                    <i class="material-icons">delete_forever</i>
+                    <form method="post" action="/edit/${ keys[i].id }" style="padding:0;margin:0;display:inline">
+                        <button  class="btn-flat" style="padding:0" type="submit">
+                        <i class="material-icons">edit</i>
+                    </button>
+                    </form>                
+                    <form method="post" action="/delete/${ keys[i].id }" style="padding:0;margin:0;display:inline">
+                        <button  class="btn-flat" type="submit" style="padding:0">
+                        <i class="material-icons red-text">delete_forever</i>
+                    </button>
+                    </form>
+
                 </td>
             </tr>
             `;
@@ -277,6 +290,10 @@
         table.innerHTML = html;
         let currentPage = document.getElementById('currentPage');
         currentPage.innerHTML = `${ page } of ${ numberOfPages } pages`;
+    }
+
+    function editKey() {
+
     }
 
     function search() {
