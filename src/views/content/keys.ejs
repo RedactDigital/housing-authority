@@ -85,6 +85,16 @@
         <span id="currentPage" style="margin-left: 38%;"></span>
         <a onclick="next()" class="btn btn-small waves-effect waves-light blue-grey right">Next</a>
     </div>
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <h4>Edit</h4>
+
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+        </div>
+    </div>
 </div>
 
 <style>
@@ -168,6 +178,19 @@
         let options = document.querySelectorAll('#pageSize option');
         var elems = document.querySelectorAll('select');
         var instances = M.FormSelect.init(elems, options);
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var elems = document.querySelectorAll('.modal');
+        var instances = M.Modal.init(elems);
+
+        var singleModalElem = document.querySelector('#modal1');
+        var instance = M.Modal.getInstance(singleModalElem);
+        const modalbtn = document.querySelector('#open')
+        modalbtn.addEventListener('click', () => {
+            instance.open();
+        })
     });
 
     function createForm() {
@@ -272,10 +295,12 @@
                 </td>
                 <td class="lockNumber" width="15%">${ keys[i].lockNumber }</td>
                 <td class="center" width="10%">
-                    <form method="post" action="/edit/${ keys[i].id }" style="padding:0;margin:0;display:inline">
-                        <button  class="btn-flat" style="padding:0" type="submit">
-                        <i class="material-icons">edit</i>
-                    </button>
+                    <form style="padding:0;margin:0;display:inline">
+                        <a class="modal-trigger" data-target="modal1" href="#modal1">
+                            
+                            <i class="material-icons">edit</i>
+                            
+                        </a>
                     </form>                
                     <form method="post" action="/delete/${ keys[i].id }" style="padding:0;margin:0;display:inline">
                         <button  class="btn-flat" type="submit" style="padding:0">
