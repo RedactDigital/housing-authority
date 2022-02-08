@@ -54,7 +54,7 @@ class Auth {
       lockNumber,
     })
 
-    res.redirect('/')
+    res.redirect(`${process.env.APP_URL}`)
   }
 
   static async update(req, res) {
@@ -76,7 +76,7 @@ class Auth {
       }
     )
 
-    res.redirect('/')
+    res.redirect(`${process.env.APP_URL}`)
   }
 
   static async delete(req, res) {
@@ -88,7 +88,7 @@ class Auth {
       },
     })
 
-    res.redirect('/')
+    res.redirect(`${process.env.APP_URL}`)
   }
 }
 

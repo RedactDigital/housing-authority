@@ -22,14 +22,13 @@ app
 // const standardAuth = passport.authenticate('jwt', { session: false, msg: 'false' });
 
 // routes
-const { auth, key } = require('./routes/index')
+const { auth } = require('./routes/index')
 
 app
   // Routes before middleware
   .use(auth)
-  // Define middleware before routes
-  //   .use(standardAuth)
-  // Routes after middleware
-  .use(key)
+// Define middleware before routes
+//   .use(standardAuth)
+// Routes after middleware
 
 module.exports = app
