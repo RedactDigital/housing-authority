@@ -4,6 +4,16 @@ const { keys } = require('../database/models')
 class Auth {
   static async index(req, res) {
     const data = await keys.findAll()
+    // for (let i = 1; i < 26; i++) {
+    //   data.push({
+    //     id: i,
+    //     key: i + 1,
+    //     doorNumber: 1 + i,
+    //     doorLocation: 'Main Building',
+    //     description: '',
+    //     lockNumber: '123456',
+    //   })
+    // }
 
     const content = await ejs.renderFile(`${__dirname}/../views/content/keys.ejs`, {
       title: process.env.APP_NAME,
